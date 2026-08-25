@@ -2,92 +2,67 @@
 
 **[fabikuun.github.io/portfolio](https://fabikuun.github.io/portfolio/)**
 
-My portfolio. Three projects, what I actually did on each of them, and one honest
-paragraph about how I work. No percentage bars, no invented metrics.
+The source for my personal site. Three projects, what I actually did on each,
+and a short section about how I work.
 
 ---
 
-## Why there's no framework
+## Built with nothing
 
-There's no React here, no Tailwind, no build step, no `node_modules`. You clone this
-and open `index.html` and it runs.
+No React, no Tailwind, no bundler, no `node_modules`. Clone it, open `index.html`,
+and it runs — there is no install step and no build step.
 
-That was a deliberate choice and it did cost me something. A framework hands you focus
-states, motion preferences and accessible markup for free; doing it by hand meant I had
-to learn what those actually are. The scroll animations respect `prefers-reduced-motion`
-because I wrote that branch myself. The contrast values are measured rather than guessed —
-where a colour was borderline, the measurement is sitting in a comment next to it.
+That was a deliberate choice, and it wasn't free. A framework hands you focus states,
+motion preferences and accessible markup for nothing; doing it by hand meant learning
+what those actually are:
 
-What I get in return: nothing here breaks because a package updated. In two years this
-will still open.
+- **Works without JavaScript.** Every animated class is added at runtime, so with
+  scripts blocked the page renders in full — it just skips the entrance.
+- **Respects `prefers-reduced-motion`** and `prefers-reduced-transparency`.
+- **Colour contrast is measured, not guessed.** Where a value sits close to the
+  WCAG AA threshold, the measured ratio is in a comment beside it.
+- **Responsive by construction.** Type, spacing, radius and layout are driven by
+  `clamp()` and `min()`, so there are no device-width breakpoints to maintain.
+- **One image, three widths, two formats.** The browser downloads exactly one —
+  usually a 40 KB WebP.
+
+What it buys me: nothing here breaks because a package updated. It will still
+open in five years.
+
+---
+
+## Stack
+
+`HTML` · `CSS` · `JavaScript` — and that's the whole list.
+
+| | |
+|---|---|
+| `index.html` | All content, as real HTML — not assembled by JavaScript |
+| `style.css` | All styling. Design tokens are at the top in `:root` |
+| `script.js` | Scroll reveals, cursor dot, progress rail, mobile menu |
+| `images/` | Portrait in WebP and JPEG, three widths each |
+| `404.html` | Served by GitHub Pages for unknown URLs |
+
+Hosted on GitHub Pages, deployed by pushing to `main`.
 
 ---
 
 ## Running it locally
 
-Double-click `index.html`. That genuinely is the whole process.
+```bash
+git clone https://github.com/Fabikuun/portfolio.git
+```
 
-If you want it served the way GitHub Pages serves it:
+Then open `index.html`. That genuinely is the whole process.
+
+To serve it the way GitHub Pages does:
 
 ```bash
 python -m http.server 8000
 ```
 
-Or the Live Server extension in VS Code — right-click `index.html` → *Open with Live Server*.
-
 ---
 
-## What's in here
+## Contact
 
-| | |
-|---|---|
-| `index.html` | Every word of content, as real HTML — not rendered by JavaScript |
-| `style.css` | All styling. Design tokens live at the top in `:root` |
-| `script.js` | Scroll reveals, the cursor dot, the progress rail, the mobile menu |
-| `images/` | Portrait at three widths, WebP with JPEG fallbacks |
-| `404.html` | GitHub Pages serves this for any URL that doesn't exist |
-
----
-
-## Things worth knowing before editing
-
-**JavaScript only adds motion.** Every animated class is applied by JS at runtime, so with
-scripts disabled nothing is hidden — the page just appears without the entrance. If you add
-something that starts invisible in CSS, you've broken that guarantee.
-
-**The scroll reveal has a deliberate failure mode.** There's a 4.5-second safety net in
-`revealOnce()`, but it only fires if something *already on screen* hasn't appeared — which
-means the observer is broken. It won't blanket-reveal the page, because that would mean
-everything below the fold finishes animating before you scroll to it. I made that mistake
-once already.
-
-**Colour opacity values are load-bearing.** Several sit just above the AA contrast threshold
-with the measurement written beside them. If you darken a section background, re-check the
-text on it rather than assuming it still passes.
-
-**The site URL appears in three places.** `<link rel="canonical">`, the Open Graph and
-Twitter tags, and `sitemap.xml`. `404.html` also uses absolute paths, since it gets served
-from arbitrary URLs. Change one, change all of them.
-
----
-
-## Adding a project
-
-Copy one `<article class="project-row">` block in `index.html` and edit it. No CSS changes
-needed — rows alternate sides automatically via `nth-child(even)`.
-
-Two rules for future me:
-
-- **Order by strength, not by date.** Most people read two entries and leave.
-- **Past four or five projects, split the list.** Keep the best few as full rows and drop
-  the rest into a compact one-line list. Ten equally-weighted rows makes the best one
-  count for less.
-
----
-
-## Deploying
-
-Push to `main`. GitHub Pages picks it up — Settings → Pages → Source: `main` / `(root)`.
-
-There's no pipeline, nothing to configure and nothing that can fail at build time,
-because there is no build.
+[GitHub](https://github.com/Fabikuun) · [LinkedIn](https://www.linkedin.com/in/fabianmahdi-iut/)
