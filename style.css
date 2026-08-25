@@ -30,6 +30,16 @@
 
     --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 
+    /* One readable line-length cap, used everywhere prose is set. min(…,100%)
+       means it can never be wider than its container — so it holds at 400%
+       zoom and on a 800x600 CRT just as well as on an ultrawide. */
+    --measure: min(68ch, 100%);
+    --measure-narrow: min(58ch, 100%);
+
+    /* Section padding scales with the viewport but is clamped at both ends,
+       so it can't collapse on a short screen or run away on a tall one. */
+    --block-pad: clamp(56px, 9vh, 140px);
+
     --cursor-dot: 4px;
     --cursor-dot-grow: 20px;
     --progress-h: 3px;
@@ -113,12 +123,33 @@
   }
 
   /* ============ BLOCKS ============ */
-  .block { position: relative; overflow: hidden; padding: 12vh 0; }
-  .block-inner { max-width: 1100px; margin: 0 auto; padding: 0 6vw; position: relative; z-index: 2; }
+  /* Every section is at least one screen tall with its content centred.
+     min-height (not height) means a section taller than the viewport still
+     grows normally rather than clipping. box-sizing: border-box keeps the
+     padding inside that height, so nothing overflows.
+     svh rather than vh: on phones vh includes the area behind the browser
+     chrome, which makes a "full screen" section overshoot and jitter as the
+     URL bar hides. Older browsers fall back to the vh line above. */
+  .block {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: var(--block-pad) 0;
+  }
+  .block-inner {
+    width: 100%;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding: 0 6vw;
+    position: relative;
+    z-index: 2;
+  }
 
   .block-hero {
     background: radial-gradient(ellipse at top left, var(--green-deep) 0%, var(--black) 62%);
-    padding-top: 15vh;
   }
   .block-pink { background: var(--pink); color: var(--ink); }
   .block-dark { background: var(--dark-panel); }
@@ -172,8 +203,8 @@
   }
 
   .hero-desc {
-    max-width: 54ch;
-    font-size: 1.1rem;
+    max-width: var(--measure);
+    font-size: clamp(1.05rem, 0.98rem + 0.32vw, 1.35rem);
     font-weight: 500;
     line-height: 1.55;
     color: var(--muted-light);
@@ -189,7 +220,12 @@
     margin-bottom: 36px;
   }
 
-  .lead-text { font-size: 1.18rem; font-weight: 600; line-height: 1.6; max-width: 60ch; }
+  .lead-text {
+    font-size: clamp(1.08rem, 1rem + 0.34vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.6;
+    max-width: var(--measure);
+  }
 
   /* ============ BUTTONS ============ */
   .hero-links { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -297,11 +333,11 @@
     margin-bottom: 14px;
   }
   .project-desc {
-    font-size: 0.98rem;
+    font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.15rem);
     font-weight: 500;
     line-height: 1.6;
     color: var(--muted-light);
-    max-width: 56ch;
+    max-width: var(--measure);
   }
 
   /* The reflection is the most interesting thing on the card, so it is not
@@ -317,11 +353,11 @@
     margin-bottom: 6px;
   }
   .reflection p {
-    font-size: 0.93rem;
+    font-size: clamp(0.93rem, 0.9rem + 0.18vw, 1.08rem);
     font-style: italic;
     line-height: 1.6;
     color: var(--muted-light);
-    max-width: 54ch;
+    max-width: var(--measure-narrow);
   }
 
   .project-links { margin-top: 22px; font-weight: 800; font-size: 0.86rem; display: flex; gap: 20px; }
@@ -334,7 +370,14 @@
   .project-links a:hover { color: var(--green); border-color: var(--green); }
 
   /* ============ SKILLS ============ */
-  .sec-lead { max-width: 56ch; font-weight: 600; font-size: 1rem; line-height: 1.55; opacity: 0.8; margin: -14px 0 30px; }
+  .sec-lead {
+    max-width: var(--measure);
+    font-weight: 600;
+    font-size: clamp(1rem, 0.95rem + 0.28vw, 1.25rem);
+    line-height: 1.55;
+    opacity: 0.8;
+    margin: -14px 0 30px;
+  }
   .skills-sub { font-weight: 900; font-size: 1.05rem; margin: 38px 0 14px; }
 
   .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
@@ -412,7 +455,7 @@
   }
 
   /* ============ BEYOND CODE ============ */
-  .note-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 640px; }
+  .note-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: var(--measure); }
   .note-card { background: rgba(255, 255, 255, 0.1); border-radius: var(--radius); padding: 24px; }
   .note-label {
     display: block;
@@ -579,6 +622,13 @@
     .js .project-body:not(.in),
     .js .project-row:nth-child(even) .project-media:not(.in),
     .js .project-row:nth-child(even) .project-body:not(.in) { transform: translateY(40px); }
+  }
+
+  /* Short viewports — a 400% zoom, a landscape phone, an 800x600 CRT. Forcing
+     a full screen there wastes the little height available, so the floor drops
+     back to content height. */
+  @media (max-height: 560px) {
+    .block { min-height: 0; padding: clamp(40px, 8vh, 72px) 0; }
   }
 
   @media (max-width: 380px) {
