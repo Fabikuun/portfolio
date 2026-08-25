@@ -1,0 +1,592 @@
+/* ============================================================
+     Preview build. Single-theme on purpose: each section paints its
+     own ground and text colour, so the page reads identically
+     whatever theme the viewer is in.
+
+     Capitalisation: sentence case for headings and prose, uppercase
+     reserved for the small tracked labels (eyebrows, spec keys, card
+     kickers) where it reads as a typographic device rather than shouting.
+     ============================================================ */
+
+  :root {
+    --black: #0A0A0A;
+    --dark-panel: #161616;
+    --green: #1DB954;
+    --green-deep: #0E7A38;
+    --pink: #F037A5;
+    --yellow: #FFC942;
+    --purple: #7C3AED;
+    --purple-deep: #4C1D95;
+    --white: #FAFAFA;
+    --ink: #0A0A0A;
+    --muted-dark: rgba(10, 10, 10, 0.85);
+    --muted-light: rgba(250, 250, 250, 0.7);
+
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --radius: 28px;
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.25s ease;
+    --transition-slow: 0.6s ease;
+
+    --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    --cursor-dot: 4px;
+    --cursor-dot-grow: 20px;
+    --progress-h: 3px;
+
+    /* 1 decorative · 2 content · 100 nav · 120 progress · 200 skip · 999 cursor */
+    --z-progress: 120;
+    --z-cursor: 999;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--white);
+    outline-offset: 3px;
+  }
+  .block-pink a:focus-visible, .block-yellow a:focus-visible,
+  .block-pink button:focus-visible, .block-yellow button:focus-visible {
+    outline-color: var(--black);
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -60px;
+    left: 12px;
+    z-index: 200;
+    background: var(--green);
+    color: var(--black);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: top var(--transition-fast);
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 6vw;
+    background: rgba(10, 10, 10, 0.72);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.02em; }
+  .nav-logo .dot { color: var(--green); }
+  .nav ul { list-style: none; display: flex; gap: 28px; }
+  .nav a {
+    font-weight: 700;
+    font-size: 0.82rem;
+    display: inline-block;
+    padding: 8px 2px; /* text height alone was under the 24px minimum target */
+    transition: color var(--transition-fast);
+  }
+  .nav a:hover { color: var(--green); }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 1.3rem;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  /* ============ BLOCKS ============ */
+  .block { position: relative; overflow: hidden; padding: 12vh 0; }
+  .block-inner { max-width: 1100px; margin: 0 auto; padding: 0 6vw; position: relative; z-index: 2; }
+
+  .block-hero {
+    background: radial-gradient(ellipse at top left, var(--green-deep) 0%, var(--black) 62%);
+    padding-top: 15vh;
+  }
+  .block-pink { background: var(--pink); color: var(--ink); }
+  .block-dark { background: var(--dark-panel); }
+  .block-yellow { background: var(--yellow); color: var(--ink); }
+  .block-purple { background: linear-gradient(135deg, var(--purple) 0%, var(--purple-deep) 100%); }
+  /* Light end was #3B82F6: white body copy measured 3.06:1 there even at full
+     opacity, so no text tweak could fix it — the ground had to darken. */
+  .block-blue { background: linear-gradient(135deg, #1E40AF 0%, #172554 100%); }
+
+  /* One static blob in the hero only. It was three animated ones. */
+  .blob {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: -140px;
+    right: -100px;
+    border-radius: 50%;
+    background: var(--green);
+    filter: blur(80px);
+    opacity: 0.32;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ============ TYPE ============ */
+  .eyebrow {
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(250, 250, 250, 0.88); /* 0.70 measured 3.45:1 on purple */
+    margin-bottom: 16px;
+  }
+  .eyebrow-dark { color: var(--muted-dark); }
+
+  .mega {
+    font-weight: 900;
+    font-size: clamp(3rem, 9vw, 6.6rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .big-heading {
+    font-weight: 900;
+    font-size: clamp(2.1rem, 5.4vw, 3.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    text-wrap: balance;
+  }
+
+  .hero-desc {
+    max-width: 54ch;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--muted-light);
+    margin: 24px 0 14px;
+  }
+
+  .hero-tagline {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+
+  .lead-text { font-size: 1.18rem; font-weight: 600; line-height: 1.6; max-width: 60ch; }
+
+  /* ============ BUTTONS ============ */
+  .hero-links { display: flex; gap: 14px; flex-wrap: wrap; }
+  .pill {
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.92rem;
+    display: inline-block;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+  }
+  .pill:hover { transform: translateY(-2px); }
+  .pill-solid { background: var(--green); color: var(--black); }
+  .pill-solid:hover { background: #24e968; }
+  .pill-outline { border: 2px solid var(--white); }
+  .pill-outline:hover { background: var(--white); color: var(--black); }
+
+  /* ============ ABOUT ============ */
+  /* minmax(0, ...) on both tracks stops a long unbroken word from forcing the
+     grid wider than its container on narrow screens. */
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 44px;
+    align-items: center; /* portrait centres against the paragraph, not the top */
+    justify-items: start;
+  }
+
+  /* The frame owns the shape, the image fills it. aspect-ratio + cover means
+     the layout is identical whatever the source file's dimensions are, and
+     never shifts while the image loads. */
+  .portrait {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: rgba(10, 10, 10, 0.08);
+  }
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* The face sits left of centre and high in the frame; this keeps it there
+       under every crop, including the square one used on phones. */
+    object-position: 46% 18%;
+    filter: saturate(0.92); /* settles the warm beach tones against the pink */
+  }
+
+  /* ============ PROJECTS ============
+     Full-width alternating rows rather than a card grid. One card in a grid
+     reads as an empty grid; one row reads as a deliberate layout. */
+  .project-list { display: flex; flex-direction: column; }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 48px 0;
+    border-top: 1px solid rgba(250, 250, 250, 0.12);
+  }
+  .project-row:first-child { border-top: none; padding-top: 8px; }
+  .project-row:nth-child(even) .project-media { order: 2; }
+
+  /* Stands in for a screenshot with real information rather than stock art. */
+  .spec-panel {
+    background: var(--black);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(250, 250, 250, 0.08);
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250, 250, 250, 0.5);
+  }
+  .spec-val { font-size: 0.86rem; font-weight: 700; text-align: right; color: var(--white); }
+
+  .project-cat {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .project-row h3 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .project-desc {
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--muted-light);
+    max-width: 56ch;
+  }
+
+  /* The reflection is the most interesting thing on the card, so it is not
+     hidden behind a flip. It sits inline, set apart by a rule and italics. */
+  .reflection { margin-top: 22px; padding-left: 18px; border-left: 2px solid var(--green); }
+  .reflection-label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .reflection p {
+    font-size: 0.93rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--muted-light);
+    max-width: 54ch;
+  }
+
+  .project-links { margin-top: 22px; font-weight: 800; font-size: 0.86rem; display: flex; gap: 20px; }
+  .project-links a {
+    border-bottom: 2px solid rgba(250, 250, 250, 0.25);
+    display: inline-block;
+    padding: 4px 0 3px;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .project-links a:hover { color: var(--green); border-color: var(--green); }
+
+  /* ============ SKILLS ============ */
+  .sec-lead { max-width: 56ch; font-weight: 600; font-size: 1rem; line-height: 1.55; opacity: 0.8; margin: -14px 0 30px; }
+  .skills-sub { font-weight: 900; font-size: 1.05rem; margin: 38px 0 14px; }
+
+  .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .proof-card {
+    background: rgba(10, 10, 10, 0.08);
+    border-radius: var(--radius);
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform var(--transition-medium), background var(--transition-medium);
+  }
+  .proof-card:hover { transform: translateY(-6px); background: rgba(10, 10, 10, 0.13); }
+  .proof-tier {
+    font-weight: 800;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7; /* 0.6 measured 4.27:1 against the tinted card, just under AA */
+  }
+  .proof-card h4 { font-weight: 900; font-size: 1.2rem; }
+  .proof-card p { font-weight: 600; font-size: 0.89rem; line-height: 1.5; opacity: 0.82; /* 8.9:1 */ }
+  .proof-where {
+    margin-top: auto;
+    font-weight: 800;
+    font-size: 0.72rem;
+    opacity: 0.7; /* 6.2:1 — 0.55 measured 3.9:1 and failed AA */
+  }
+
+  .also-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .also-chip {
+    background: rgba(10, 10, 10, 0.1);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-weight: 800;
+    font-size: 0.82rem;
+  }
+
+  .ask-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .ask-card {
+    background: var(--ink);
+    color: var(--yellow);
+    border-radius: var(--radius);
+    padding: 24px;
+    font-weight: 700;
+    font-size: 0.93rem;
+    line-height: 1.45;
+    transition: transform var(--transition-medium);
+  }
+  .ask-card:hover { transform: translateY(-6px); }
+  .ask-q {
+    display: block;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6; /* yellow @60% on ink = 5.1:1 */
+    margin-bottom: 8px;
+    font-weight: 800;
+  }
+
+  /* ============ EDUCATION ============ */
+  .edu-card { background: rgba(255, 255, 255, 0.1); border-radius: var(--radius); padding: 32px; max-width: 560px; }
+  .edu-card h3 { font-weight: 900; font-size: 1.35rem; margin-bottom: 8px; }
+  .edu-card p { font-weight: 600; margin-bottom: 16px; } /* 0.9 measured 4.02:1 */
+  .edu-tag {
+    display: inline-block;
+    background: var(--white);
+    color: var(--purple-deep);
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+  }
+
+  /* ============ BEYOND CODE ============ */
+  .note-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 640px; }
+  .note-card { background: rgba(255, 255, 255, 0.1); border-radius: var(--radius); padding: 24px; }
+  .note-label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 10px;
+  }
+  .note-card p { font-size: 0.94rem; font-weight: 600; line-height: 1.5; }
+  .note-links { display: flex; gap: 16px; margin-top: 22px; font-weight: 800; font-size: 0.82rem; }
+  .note-links a {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    display: inline-block;
+    padding: 4px 0 3px;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+  }
+  .note-links a:hover { color: var(--yellow); border-color: var(--yellow); }
+
+  /* ============ CONTACT ============ */
+  .contact-links { display: flex; flex-direction: column; margin-top: 18px; }
+  .contact-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 4px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    transition: padding-left var(--transition-fast), color var(--transition-fast);
+  }
+  .contact-link:hover { padding-left: 14px; color: var(--green); }
+  .contact-link span {
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .contact-link strong { font-weight: 800; font-size: 1.2rem; }
+
+  /* ============ FOOTER ============ */
+  .site-footer {
+    background: var(--black);
+    padding: 24px 6vw 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.58); /* 0.4 measured 3.77:1 */
+  }
+
+  /* ============ CURSOR ============
+     difference blend means one white dot stays legible on every section
+     colour — no per-section overrides needed. */
+  #cursor-dot {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--cursor-dot);
+    height: var(--cursor-dot);
+    margin: calc(var(--cursor-dot) / -2) 0 0 calc(var(--cursor-dot) / -2);
+    border-radius: 50%;
+    background: #fff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: var(--z-cursor);
+    opacity: 0;
+    transition: opacity var(--transition-medium),
+                width var(--transition-medium) var(--ease-out),
+                height var(--transition-medium) var(--ease-out),
+                margin var(--transition-medium) var(--ease-out),
+                background var(--transition-medium),
+                border var(--transition-medium);
+  }
+  body.cursor-on #cursor-dot { opacity: 1; }
+  body.cursor-on.cursor-grow #cursor-dot {
+    width: var(--cursor-dot-grow);
+    height: var(--cursor-dot-grow);
+    margin: calc(var(--cursor-dot-grow) / -2) 0 0 calc(var(--cursor-dot-grow) / -2);
+    background: transparent;
+    border: 2px solid #fff;
+  }
+
+  /* ============ SCROLL PROGRESS ============ */
+  #progress-rail {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--progress-h);
+    z-index: var(--z-progress);
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+  }
+  /* scaleX rather than width — transform-only, so scrolling never triggers layout. */
+  #progress-fill {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--green), var(--yellow), var(--pink));
+  }
+
+  /* ============ REVEAL ============
+     Directional slide, no scale, no spring overshoot — longer travel on a
+     single easing curve, so tiles settle rather than bounce. */
+  .js .tile {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  .js .tile.in { opacity: 1; transform: none; }
+
+  .js .splitw .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.5em);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  .js .splitw.in .w { opacity: 1; transform: none; }
+
+  /* Project rows arrive from the side they occupy, so the two halves converge
+     on the centre. :not(.in) keeps these from outranking the reset above. */
+  /* Only the big panels get a compositing hint, and only while they still
+     have somewhere to travel — promoting every tile would cost more than it
+     saves. The hint is dropped on .in so the layers are released. */
+  .js .project-media:not(.in),
+  .js .project-body:not(.in) { will-change: transform, opacity; }
+  .js .project-media.in,
+  .js .project-body.in { will-change: auto; }
+
+  .js .project-media:not(.in) { transform: translateX(-50px); }
+  .js .project-body:not(.in) { transform: translateX(50px); }
+  .js .project-row:nth-child(even) .project-media:not(.in) { transform: translateX(50px); }
+  .js .project-row:nth-child(even) .project-body:not(.in) { transform: translateX(-50px); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 820px) {
+    .nav ul {
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      flex-direction: column;
+      background: var(--black);
+      padding: 18px 6vw;
+      gap: 16px;
+      display: none;
+    }
+    .nav ul.open { display: flex; }
+    .nav-toggle { display: block; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    /* Square on phones: a 3:4 portrait at full column width would take most of
+       the viewport before the reader reaches anything else. */
+    .portrait { aspect-ratio: 1 / 1; max-width: 260px; }
+    .project-row { grid-template-columns: 1fr; gap: 28px; }
+    /* Single column: the spec panel always leads, so the alternation that
+       gives the desktop list its rhythm doesn't scramble reading order. */
+    .project-row:nth-child(even) .project-media { order: 0; }
+    /* Horizontal travel would push the row off-screen in one column. */
+    .js .project-media:not(.in),
+    .js .project-body:not(.in),
+    .js .project-row:nth-child(even) .project-media:not(.in),
+    .js .project-row:nth-child(even) .project-body:not(.in) { transform: translateY(40px); }
+  }
+
+  @media (max-width: 380px) {
+    .portrait { max-width: 208px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js .tile, .js .splitw .w { opacity: 1; transform: none; transition: none; }
+    #cursor-dot { display: none; }
+  }

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>document.documentElement.classList.add('js');</script>
+<title>Fabian — Developer Portfolio</title>
+<meta name="description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<link rel="canonical" href="https://fabikuun.github.io/portfolio/">
+<meta name="theme-color" content="#0A0A0A">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fabian — Developer Portfolio">
+<meta property="og:description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<meta property="og:url" content="https://fabikuun.github.io/portfolio/">
+<meta property="og:image" content="https://fabikuun.github.io/portfolio/images/profile-1020.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fabian — Developer Portfolio">
+<meta name="twitter:description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<meta name="twitter:image" content="https://fabikuun.github.io/portfolio/images/profile-1020.jpg">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Fabian",
+  "url": "https://fabikuun.github.io/portfolio/",
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Islamic University of Technology" },
+  "sameAs": ["https://github.com/Fabikuun", "https://www.linkedin.com/in/fabianmahdi-iut/"]
+}
+</script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav">
+  <div class="nav-logo">Fabian<span class="dot">.</span></div>
+  <ul id="navList">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#beyond">Beyond Code</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navList">☰</button>
+</nav>
+
+<header class="block block-hero">
+  <div class="blob" aria-hidden="true"></div>
+  <div class="block-inner">
+    <h1 class="mega">Hey, I'm<br>Fabian.</h1>
+    <p class="hero-desc">
+      I build things that have to stay in agreement — two machines holding the same
+      world across a network, a service handing out short codes without ever
+      repeating one.
+    </p>
+    <p class="hero-tagline">An ongoing story, updated as I build.</p>
+    <div class="hero-links">
+      <a href="#projects" class="pill pill-solid">See my projects</a>
+      <a href="#contact" class="pill pill-outline">Say hi</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="about" class="block block-pink">
+    <div class="block-inner">
+      <p class="eyebrow eyebrow-dark">Ch. 01 — About</p>
+      <h2 class="big-heading">The short version</h2>
+      <div class="about-grid">
+        <p class="lead-text">
+          I like the part of a problem where the pieces have to agree with each other.
+          Most of what I build ends up there eventually — two machines holding the same
+          state, one class quietly doing three jobs, an interface that made perfect sense
+          to the people who built it and to nobody else. I learn more from the version
+          that didn't work than the one that did, and I'd rather write down why something
+          is the way it is than pretend it was obvious all along.
+        </p>
+        <figure class="portrait">
+          <picture>
+            <source
+              type="image/webp"
+              srcset="images/profile-340.webp 340w,
+                      images/profile-680.webp 680w,
+                      images/profile-1020.webp 1020w"
+              sizes="(max-width: 380px) 208px, (max-width: 820px) 260px, 340px">
+            <img
+              src="images/profile-680.jpg"
+              srcset="images/profile-340.jpg 340w,
+                      images/profile-680.jpg 680w,
+                      images/profile-1020.jpg 1020w"
+              sizes="(max-width: 380px) 208px, (max-width: 820px) 260px, 340px"
+              alt="Fabian"
+              width="680" height="907"
+              loading="lazy" decoding="async">
+          </picture>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="block block-dark">
+    <div class="block-inner">
+      <p class="eyebrow">Ch. 02 — Projects</p>
+      <h2 class="big-heading">What I've built</h2>
+      <div class="project-list">
+
+        <article class="project-row">
+          <div class="project-media">
+            <div class="spec-panel">
+              <div class="spec-row"><span class="spec-key">Stack</span><span class="spec-val">Java 21 · libGDX</span></div>
+              <div class="spec-row"><span class="spec-key">Networking</span><span class="spec-val">Sockets, custom protocol</span></div>
+              <div class="spec-row"><span class="spec-key">Sync</span><span class="spec-val">11 message types, level 1</span></div>
+              <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">In progress</span></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <p class="project-cat">Java · libGDX · LAN multiplayer</p>
+            <h3>Nox Sync</h3>
+            <p class="project-desc">
+              A two-player co-op survival game where both players are on separate machines
+              over a LAN. I wrote the networking from scratch — a host/client session model
+              with its own typed message protocol, because the two screens have to agree on
+              enemy positions, health and puzzle state without ever drifting apart. Level 1
+              is a reactor room: one player enters code fragments while an alert meter
+              climbs and an enemy swarm closes in.
+            </p>
+            <div class="reflection">
+              <span class="reflection-label">The hard part</span>
+              <p>
+                Deciding what to send over the wire. Sending whole world state every frame
+                is simple and doesn't scale; sending nothing but inputs means the two
+                machines quietly disagree. I ended up with eleven separate message types
+                for level 1 alone — enemy state, alert meter, digit accepted, wrong answer,
+                reactor unlock, player died — each one existing because something desynced
+                without it.
+              </p>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/sadiaaurthy/NOX-SYNC" target="_blank" rel="noopener noreferrer">Repo →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-media">
+            <div class="spec-panel">
+              <div class="spec-row"><span class="spec-key">Stack</span><span class="spec-val">Spring Boot 4.1 · Java 21</span></div>
+              <div class="spec-row"><span class="spec-key">Storage</span><span class="spec-val">MySQL · H2 for tests</span></div>
+              <div class="spec-row"><span class="spec-key">Layers</span><span class="spec-val">Controller · Service · DAO</span></div>
+              <div class="spec-row"><span class="spec-key">Extras</span><span class="spec-val">QR codes · Click analytics</span></div>
+              <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">Working</span></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <p class="project-cat">Java · Spring Boot · REST</p>
+            <h3>URL Shortener</h3>
+            <p class="project-desc">
+              Paste a long link, get a short code back, and it tracks the clicks — plus a
+              QR code endpoint for each link. Codes come from a cryptographically secure
+              generator with a collision check against the database before anything is
+              handed out. Every database credential comes from an environment variable
+              with a safe default, so nothing sensitive is ever committed.
+            </p>
+            <div class="reflection">
+              <span class="reflection-label">Why not a to-do app</span>
+              <p>
+                I wanted something small enough to actually finish that still had real
+                parts to it — routing, database design, and analytics. I kept a running
+                log of decisions in the repo while building rather than writing it up
+                afterwards, so the reasoning is still there when I go back to it.
+              </p>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/Fabikuun/url-shortener" target="_blank" rel="noopener noreferrer">Repo →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-media">
+            <div class="spec-panel">
+              <div class="spec-row"><span class="spec-key">Language</span><span class="spec-val">C++</span></div>
+              <div class="spec-row"><span class="spec-key">Paradigm</span><span class="spec-val">Object-oriented</span></div>
+              <div class="spec-row"><span class="spec-key">Interface</span><span class="spec-val">Terminal</span></div>
+              <div class="spec-row"><span class="spec-key">Domain</span><span class="spec-val">Bookings · Billing · Payments</span></div>
+              <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">Completed</span></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <p class="project-cat">C++ · OOP · Sem 03</p>
+            <h3>Hotel Management System</h3>
+            <p class="project-desc">
+              A terminal booking system for my OOP course — search a room by location, date
+              and price, then book it. I took billing apart: pulled payment processing out
+              of the billing class into its own type, moved shared behaviour up into a base
+              class, templated the menu handling, and replaced silent failures with real
+              error handling. I also overloaded the date operators, so working out a stay
+              length reads like ordinary subtraction.
+            </p>
+            <div class="reflection">
+              <span class="reflection-label">If I rebuilt it today</span>
+              <p>
+                A real database instead of a hardcoded one, an API to actually simulate
+                booking, and fixing the flow — we asked for location and room before
+                dates, backwards from how every real booking site works. I didn't notice
+                until it was already built.
+              </p>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/ArefinMahim/Project_403" target="_blank" rel="noopener noreferrer">Repo →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="block block-yellow">
+    <div class="block-inner">
+      <p class="eyebrow eyebrow-dark">Ch. 03 — Skills</p>
+      <h2 class="big-heading">What I work with</h2>
+      <p class="sec-lead">
+        No percentage bars here. A bar reading "C++ 85%" would be a number I made up.
+        So this is just where each one has actually been used, and what you can ask
+        me about.
+      </p>
+
+      <h3 class="skills-sub">Used it on something real</h3>
+      <div class="proof-grid">
+        <article class="proof-card">
+          <span class="proof-tier">Main language</span>
+          <h4>Java</h4>
+          <p>
+            Two projects, two very different shapes — a Spring Boot REST service with a
+            layered controller/service/DAO split, and a networked game where I wrote the
+            socket layer and its message protocol by hand.
+          </p>
+          <span class="proof-where">Nox Sync · URL Shortener</span>
+        </article>
+        <article class="proof-card">
+          <span class="proof-tier">Language</span>
+          <h4>C++</h4>
+          <p>
+            Refactored a billing class that did too much — split payment into its own type,
+            lifted shared behaviour into a base class, templated the menu handling, and
+            overloaded the date operators so stay length reads like subtraction.
+          </p>
+          <span class="proof-where">Hotel Management System</span>
+        </article>
+        <article class="proof-card">
+          <span class="proof-tier">The web bit</span>
+          <h4>HTML · CSS · JS</h4>
+          <p>
+            This site, and the front end for the shortener. Hand-written, no framework,
+            no build step — which meant owning the parts a framework usually hides: focus
+            states, reduced-motion handling, and still working with JavaScript switched off.
+          </p>
+          <span class="proof-where">This portfolio · URL Shortener</span>
+        </article>
+        <article class="proof-card">
+          <span class="proof-tier">Workflow</span>
+          <h4>Git &amp; GitHub</h4>
+          <p>
+            Branches, pull requests and merges across two team projects, and it's what
+            ships this site — every change a commit that goes straight to GitHub Pages.
+          </p>
+          <span class="proof-where">Both team projects · This site</span>
+        </article>
+      </div>
+
+      <h3 class="skills-sub">Also in the toolbox</h3>
+      <div class="also-row">
+        <span class="also-chip">C</span>
+        <span class="also-chip">Python</span>
+        <span class="also-chip">MySQL</span>
+        <span class="also-chip">Gradle</span>
+        <span class="also-chip">Maven</span>
+        <span class="also-chip">JavaFX</span>
+        <span class="also-chip">raylib</span>
+        <span class="also-chip">VS Code</span>
+      </div>
+
+      <h3 class="skills-sub">Ask me about</h3>
+      <div class="ask-grid">
+        <div class="ask-card">
+          <span class="ask-q">The one I got wrong</span>
+          Why our booking flow asked for location and room before dates — backwards from
+          every real booking site, and I didn't notice until it was built.
+        </div>
+        <div class="ask-card">
+          <span class="ask-q">The one that took longest</span>
+          Why two machines in the same game kept quietly disagreeing, and how eleven
+          message types turned out to be the answer rather than one big one.
+        </div>
+        <div class="ask-card">
+          <span class="ask-q">The small detail I like</span>
+          Short codes come from a secure generator, then get checked against the
+          database before anyone sees them — collisions are rare, not impossible.
+        </div>
+        <div class="ask-card">
+          <span class="ask-q">The stubborn choice</span>
+          Building this site with zero dependencies — slower to write, but nothing here
+          breaks because a package updated.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="block block-purple">
+    <div class="block-inner">
+      <p class="eyebrow">Ch. 04 — Education</p>
+      <h2 class="big-heading">Where I study</h2>
+      <div class="edu-card">
+        <h3>Islamic University of Technology</h3>
+        <p>B.Sc. in Computer Science &amp; Engineering</p>
+        <span class="edu-tag">In progress</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="beyond" class="block block-blue">
+    <div class="block-inner">
+      <p class="eyebrow">Ch. 05 — Beyond Code</p>
+      <h2 class="big-heading">Off the clock</h2>
+      <div class="note-grid">
+        <div class="note-card">
+          <span class="note-label">What I watch</span>
+          <p>
+            Anime and manga, mostly the slow character-driven kind. I drop plenty of
+            what I start — I'd rather stop early than finish something out of obligation.
+          </p>
+        </div>
+        <div class="note-card">
+          <span class="note-label">What I listen to</span>
+          <p>
+            Something is always playing while I work, and it's mostly Japanese — YOASOBI,
+            Ado, Kenshi Yonezu — with Arctic Monkeys and The Weeknd wandering in from
+            somewhere else entirely. Anime and J-pop topped my year, which lines up
+            suspiciously well with the card above.
+          </p>
+        </div>
+      </div>
+      <div class="note-links">
+        <a href="https://myanimelist.net/profile/Fabikuun" target="_blank" rel="noopener noreferrer">The list →</a>
+        <a href="https://open.spotify.com/user/mijgjk3dn4cyp8dmco9ws19v2" target="_blank" rel="noopener noreferrer">What I code to →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="block block-hero">
+    <div class="block-inner">
+      <p class="eyebrow">Ch. 06 — Contact</p>
+      <h2 class="big-heading">Let's talk</h2>
+      <div class="contact-links">
+        <a href="https://github.com/Fabikuun" target="_blank" rel="noopener noreferrer" class="contact-link"><span>GitHub</span><strong>github.com/Fabikuun</strong></a>
+        <a href="https://www.linkedin.com/in/fabianmahdi-iut/" target="_blank" rel="noopener noreferrer" class="contact-link"><span>LinkedIn</span><strong>linkedin.com/in/fabianmahdi-iut</strong></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span>Fabian</span>
+  <span>Built with HTML, CSS &amp; JS</span>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
