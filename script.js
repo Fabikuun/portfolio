@@ -75,7 +75,7 @@
         document.body.classList.remove('cursor-on');
       });
 
-      var GROW = 'a, button, .pill, .spec-panel, .contact-link, .proof-card, .ask-card, .note-card';
+      var GROW = 'a, button, .pill, .spec-panel, .social-btn, .contact-mail, .proof-card, .ask-card, .note-card';
       document.addEventListener('mouseover', function (e) {
         var target = e.target instanceof Element ? e.target : null;
         document.body.classList.toggle('cursor-grow', !!(target && target.closest(GROW)));
@@ -109,7 +109,7 @@
 
     var TILE_SELECTOR = [
       '.portrait', '.project-media', '.project-body', '.proof-card', '.ask-card',
-      '.also-chip', '.edu-card', '.contact-link', '.note-card',
+      '.also-chip', '.edu-card', '.social-btn', '.contact-mail', '.note-card',
       '.eyebrow', '.sec-lead', '.skills-sub'
     ].join(',');
 
@@ -179,6 +179,93 @@
       revealOnce(headings, 'in');
     }
 
+    /* The address is split across two data attributes and only joined at the
+       moment it is needed. Harvesters read served HTML; they don't fill forms.
+
+       There is no backend here and no third-party form service — the form
+       composes a mailto: and hands it to whatever mail client the visitor
+       already uses. That is why the button says "open" rather than "send":
+       nothing is transmitted from this page, and claiming otherwise would be
+       a lie the moment someone has no mail client configured. */
+    function address(el) {
+      return el.dataset.user + '@' + el.dataset.domain;
+    }
+
+    function initMailReveal() {
+      var form = document.getElementById('mailForm');
+      var btn = document.getElementById('mailReveal');
+      var label = document.getElementById('mailRevealText');
+      if (!form || !btn || !label) return;
+      btn.addEventListener('click', function () {
+        label.textContent = address(form);
+        btn.disabled = true;
+      });
+    }
+
+    function initMailForm() {
+      var form = document.getElementById('mailForm');
+      if (!form) return;
+      var status = document.getElementById('mf-status');
+
+      function check(field, errId) {
+        var err = document.getElementById(errId);
+        var empty = !field.value.trim();
+        field.setAttribute('aria-invalid', String(empty));
+        err.hidden = !empty;
+        return !empty;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var subject = document.getElementById('mf-subject');
+        var message = document.getElementById('mf-message');
+        var okSubject = check(subject, 'mf-subject-err');
+        var okMessage = check(message, 'mf-message-err');
+
+        if (!okSubject || !okMessage) {
+          status.textContent = '';
+          (okSubject ? message : subject).focus();
+          return;
+        }
+
+        /* A real link click rather than assigning location.href: several
+           in-app browsers (Messenger, Instagram) silently ignore a scripted
+           location change to a mailto:, but will follow an anchor. */
+        var link = document.createElement('a');
+        link.href = 'mailto:' + address(form)
+          + '?subject=' + encodeURIComponent(subject.value.trim())
+          + '&body=' + encodeURIComponent(message.value.trim());
+        link.rel = 'noopener';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        status.textContent = 'Opening your mail app…';
+      });
+
+      // clear the error the moment they start fixing it
+      ['mf-subject', 'mf-message'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', function () {
+          if (this.getAttribute('aria-invalid') === 'true' && this.value.trim()) {
+            this.setAttribute('aria-invalid', 'false');
+            document.getElementById(id + '-err').hidden = true;
+          }
+        });
+      });
+    }
+
+    /* Hover covers pointers; touch screens have none, so a tap toggles the
+       same state. Gated to coarse pointers so a mouse user tapping doesn't
+       leave the image stuck in the moved position. */
+    function initZoomTouch() {
+      if (finePointer) return;
+      list('.zoomable').forEach(function (frame) {
+        frame.addEventListener('click', function () {
+          frame.classList.toggle('is-active');
+        });
+      });
+    }
+
     function initNav() {
       var t = document.getElementById('navToggle');
       var l = document.getElementById('navList');
@@ -201,6 +288,9 @@
       safe('split-text', initSplitText);
       safe('tiles', initTiles);
       safe('nav', initNav);
+      safe('mail-reveal', initMailReveal);
+      safe('mail-form', initMailForm);
+      safe('zoom-touch', initZoomTouch);
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

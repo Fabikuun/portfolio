@@ -14,6 +14,7 @@
     --green: #1DB954;
     --green-deep: #0E7A38;
     --pink: #F037A5;
+    --sky: #2BB0D9;   /* pulled from the shirt in the portrait */
     --yellow: #FFC942;
     --purple: #7C3AED;
     --purple-deep: #4C1D95;
@@ -102,8 +103,8 @@
     outline: 3px solid var(--white);
     outline-offset: 3px;
   }
-  .block-pink a:focus-visible, .block-yellow a:focus-visible,
-  .block-pink button:focus-visible, .block-yellow button:focus-visible {
+  .block-sky a:focus-visible, .block-yellow a:focus-visible, .block-green a:focus-visible,
+  .block-sky button:focus-visible, .block-yellow button:focus-visible, .block-green button:focus-visible {
     outline-color: var(--black);
   }
 
@@ -281,13 +282,13 @@
   .block-hero {
     background: radial-gradient(ellipse at top left, var(--green-deep) 0%, var(--black) 62%);
   }
-  .block-pink { background: var(--pink); color: var(--ink); }
+  .block-sky { background: var(--sky); color: var(--ink); }
   .block-dark { background: var(--dark-panel); }
   .block-yellow { background: var(--yellow); color: var(--ink); }
   .block-purple { background: linear-gradient(135deg, var(--purple) 0%, var(--purple-deep) 100%); }
-  /* Light end was #3B82F6: white body copy measured 3.06:1 there even at full
-     opacity, so no text tweak could fix it — the ground had to darken. */
-  .block-blue { background: linear-gradient(135deg, #1E40AF 0%, #172554 100%); }
+  /* Spotify green carries ink, not white — white on #1DB954 measures 2.48:1.
+     So this behaves like the yellow section: light ground, dark text. */
+  .block-green { background: var(--green); color: var(--ink); }
 
   /* Was a 420px circle with filter: blur(80px). A large blur filter inside an
      overflow:hidden parent is the classic source of iOS repaint artifacts —
@@ -398,8 +399,12 @@
     aspect-ratio: 3 / 4;
     border-radius: var(--radius);
     overflow: hidden;
-    background: var(--surface-dark);
+    /* One flat colour, not a tint of the section — the photo reads as a framed
+       print rather than a hole punched in the background. */
+    background: var(--black);
   }
+  /* The frame stays still and the picture moves inside it. overflow: hidden on
+     the frame is what makes the movement read as motion rather than growth. */
   .portrait img {
     display: block;
     width: 100%;
@@ -408,8 +413,15 @@
     /* The face sits left of centre and high in the frame; this keeps it there
        under every crop, including the square one used on phones. */
     object-position: 46% 18%;
-    filter: saturate(0.92); /* settles the warm beach tones against the pink */
   }
+  /* One behaviour for every zoomable image. :hover is gated behind a real
+     pointer — iOS applies :hover on tap and keeps it applied, which would fight
+     the .is-active toggle and leave the picture stuck. Touch gets the class only. */
+  .zoomable img { transition: transform 0.6s var(--ease-out); }
+  @media (hover: hover) and (pointer: fine) {
+    .zoomable:hover img { transform: scale(1.06); }
+  }
+  .zoomable.is-active img { transform: scale(1.06); }
 
   /* ============ PROJECTS ============
      Full-width alternating rows rather than a card grid. One card in a grid
@@ -504,6 +516,52 @@
   }
   .project-links a:hover { color: var(--green); border-color: var(--green); }
 
+  /* ============ SETUP ============
+     Reuses the project spec panel — a build list is literally key/value rows,
+     so it needs no new component. */
+  .setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-grid);
+  }
+  @media (max-width: 820px) { .setup-grid { grid-template-columns: 1fr; } }
+  /* Half-width instead of full-bleed: the source is 2560px wide, so at roughly
+     580px on screen it is downscaled more than 4x and never shows its grain.
+
+     The frame matches the photo's own 4:3, and the image is contained rather
+     than covered — cover would crop the sides off the desk the moment the cell
+     is any other shape. Contained inside a matching frame means the whole desk
+     is visible at every viewport, ratio and zoom level, with no letterboxing.
+     align-self keeps the cell from stretching to the panel beside it, which
+     would have reintroduced the letterbox. */
+  .desk-shot {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--black);
+    aspect-ratio: 4 / 3;
+  }
+  /* Beside a panel it drops its own ratio and takes the row's height instead,
+     so the two form a matched pair rather than one overhanging the other.
+     object-fit: contain still shows the whole desk; the spare width fills with
+     --black, which is the same ground the spec panels use — so it reads as a
+     panel with a photo in it, not a photo with bars around it. */
+  @media (min-width: 821px) {
+    .desk-shot { aspect-ratio: auto; align-self: stretch; }
+  }
+  .desk-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Each cell fills its row so the four blocks line up. Without this the
+     8-row panel sets the row height and the 4-row one leaves a hole under it. */
+  .setup-col { display: flex; flex-direction: column; }
+  .setup-col .spec-panel { flex: 1; }
+  .setup-col .skills-sub { margin-top: 0; }
+  .setup-col .spec-val { max-width: 62%; }
+
   /* ============ SKILLS ============ */
   .sec-lead {
     max-width: var(--measure);
@@ -573,17 +631,56 @@
     font-weight: 800;
   }
 
-  /* ============ EDUCATION ============ */
-  .edu-card {
-    background: var(--surface-light);
+  /* ============ EDUCATION ============
+     A timeline rather than a card: the year column is what makes three entries
+     scannable, and one entry still reads as deliberate rather than lonely.
+     The year column is what makes three entries scannable. */
+  .edu-timeline { list-style: none; display: grid; gap: var(--gap-grid); }
+  .edu-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: clamp(18px, 2.5vw, 40px);
+    /* Ink, not white. A white overlay on this purple produced a card so light
+       that year, body and heading all had to sit at ~0.99 opacity to clear AA —
+       which is no hierarchy at all. Darkening the card buys back three weights. */
+    background: rgba(10, 10, 10, 0.2);
     border-radius: var(--radius);
-    padding: clamp(28px, 3.5vw, 48px);
-    max-width: min(760px, 100%);
+    padding: clamp(22px, 2.6vw, 34px);
   }
-  .edu-card h3 { font-weight: 900; font-size: clamp(1.35rem, 1.15rem + 0.9vw, 2rem); margin-bottom: 10px; }
-  .edu-card p { font-weight: 600; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.2rem); margin-bottom: 18px; }
+  .edu-year {
+    font-size: var(--fs-label);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    opacity: 0.75;
+  }
+  /* A white pad behind each mark: both logos are drawn for light grounds, and
+     the college one has fine red linework that disappears on purple. alt="" —
+     the institution name is right beside it, so announcing it twice is noise. */
+  .edu-logo {
+    width: clamp(38px, 4vw, 54px);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #fff;
+    padding: 5px;
+  }
+
+  .edu-body h3 { font-weight: 900; font-size: clamp(1.1rem, 0.98rem + 0.55vw, 1.55rem); margin-bottom: 4px; }
+  .edu-body p { font-weight: 600; font-size: var(--fs-body-sm); opacity: 0.9; }
+
+  @media (max-width: 620px) {
+    /* Logo and year share the top line, the rest stacks underneath. */
+    .edu-row { grid-template-columns: auto 1fr; gap: 8px 14px; }
+    .edu-logo { grid-row: span 2; align-self: start; }
+    .edu-tag { grid-column: 2; justify-self: start; }
+  }
   .edu-tag {
     display: inline-block;
+    white-space: nowrap;
     background: var(--white);
     color: var(--purple-deep);
     font-weight: 800;
@@ -623,26 +720,141 @@
   }
   .note-links a:hover { color: var(--yellow); border-color: var(--yellow); }
 
+  /* On the green ground every white surface has to become an ink one. */
+  .block-green .note-card { background: var(--surface-dark); }
+  .block-green .note-links a { border-bottom-color: rgba(10, 10, 10, 0.28); }
+  .block-green .note-links a:hover { color: var(--black); border-color: var(--black); }
+
   /* ============ CONTACT ============ */
-  .contact-links { display: flex; flex-direction: column; margin-top: 18px; }
-  .contact-link {
-    display: flex;
-    justify-content: space-between;
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: var(--gap-grid);
+    align-items: stretch;
+  }
+  .contact-lead {
+    font-size: var(--fs-body-sm);
+    font-weight: 600;
+    color: var(--muted-light);
+    max-width: 40ch;
+    margin-bottom: 18px;
+  }
+
+  .social-row { display: grid; gap: var(--gap-grid); }
+  .social-btn {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 16px;
-    padding: 24px 4px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-    transition: padding-left var(--transition-fast), color var(--transition-fast);
+    padding: var(--pad-card);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--hairline);
+    transition: transform var(--transition-medium),
+                background var(--transition-medium),
+                border-color var(--transition-medium);
   }
-  .contact-link:hover { padding-left: 14px; color: var(--green); }
-  .contact-link span {
+  .social-btn:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(29, 185, 84, 0.55);
+    color: var(--green);
+  }
+  .social-btn svg { display: block; }
+  .social-name { font-weight: 800; font-size: var(--fs-body-sm); }
+  .social-handle {
     font-weight: 700;
-    font-size: var(--fs-kicker);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    opacity: 0.6;
+    font-size: var(--fs-label);
+    color: rgba(250, 250, 250, 0.55);
+    text-align: right;
   }
-  .contact-link strong { font-weight: 800; font-size: clamp(1.05rem, 0.95rem + 0.55vw, 1.55rem); }
+
+  .contact-mail {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: var(--pad-card);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--hairline);
+  }
+  .contact-mail p {
+    font-size: var(--fs-body-sm);
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--muted-light);
+  }
+  .form-field { display: grid; gap: 6px; }
+  .form-field label {
+    font-size: var(--fs-kicker);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    font: inherit;
+    font-size: var(--fs-body-sm);
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 12px 14px;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .form-field textarea { resize: vertical; min-height: 96px; }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder { color: rgba(250, 250, 250, 0.45); }
+  .form-field input:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .form-field input:focus-visible,
+  .form-field textarea:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  /* Invalid state is a border colour AND the message below it — never colour alone. */
+  .form-field [aria-invalid="true"] { border-color: #FF8A8A; }
+  .form-error { font-size: var(--fs-label); font-weight: 700; color: #FF9E9E; }
+  .form-status { font-size: var(--fs-label); font-weight: 700; color: var(--green); min-height: 1.2em; }
+
+  .mail-plain {
+    background: none;
+    border: none;
+    padding: 4px 0;
+    font: inherit;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    color: rgba(250, 250, 250, 0.6);
+    text-align: left;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .mail-plain:hover { color: var(--green); }
+
+  .mail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 999px;
+    background: var(--green);
+    color: var(--black);
+    font-family: inherit;
+    font-weight: 800;
+    font-size: var(--fs-body-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+  }
+  .mail-btn { align-self: flex-start; }
+  .mail-btn:hover { transform: translateY(-2px); background: #24e968; }
+  .mail-btn svg { flex-shrink: 0; }
 
   /* ============ FOOTER ============ */
   .site-footer {
@@ -842,4 +1054,7 @@
     .bars i,
     .nav ul,
     .nav ul li { transition: none; }
+    .zoomable img { transition: none; }
+    .zoomable:hover img,
+    .zoomable.is-active img { transform: none; }
   }
