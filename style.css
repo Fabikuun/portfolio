@@ -88,6 +88,10 @@
   .skip-link:focus { top: 12px; }
 
   /* ============ NAV ============ */
+  /* Glass is applied to floating chrome only — the bar and the mobile panel —
+     never to content cards. A pane that sits over moving content is what the
+     effect is actually describing; putting it on everything is the thing that
+     makes a design look like a template. */
   .nav {
     position: sticky;
     top: 0;
@@ -96,9 +100,37 @@
     align-items: center;
     justify-content: space-between;
     padding: 18px 6vw;
-    background: rgba(10, 10, 10, 0.72);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.55);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    backdrop-filter: blur(18px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  /* The wet edge — a highlight that fades out toward the sides, which is what
+     separates "frosted pane" from "grey box". */
+  .nav::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+    pointer-events: none;
+  }
+
+  /* Browsers with no backdrop-filter — anything pre-2021, and Firefox until it
+     shipped by default — would render the bar as a 55% transparent black
+     rectangle with text scrolling through it. They get an opaque bar instead. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav { background: rgba(10, 10, 10, 0.94); }
+  }
+
+  /* Some people turn transparency off at OS level; honour it. */
+  @media (prefers-reduced-transparency: reduce) {
+    .nav {
+      background: rgba(10, 10, 10, 0.96);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .nav::after { opacity: 0.4; }
   }
   .nav-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.02em; }
   .nav-logo .dot { color: var(--green); }
@@ -117,10 +149,44 @@
     background: none;
     border: none;
     color: var(--white);
-    font-size: 1.3rem;
-    padding: 10px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     cursor: pointer;
+    border-radius: 12px;
+    transition: background var(--transition-fast);
   }
+  .nav-toggle:hover { background: rgba(255, 255, 255, 0.08); }
+
+  /* Three absolutely-positioned bars. The middle one dissolves, the outer two
+     travel to the centre line and cross — so it is one continuous movement
+     rather than a swap between two icons. aria-expanded is the state hook,
+     which the script already maintains, so there is no second source of truth. */
+  .bars {
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 16px;
+    margin: 0 auto;
+  }
+  .bars i {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: top 0.3s var(--ease-out),
+                transform 0.3s var(--ease-out),
+                opacity 0.18s linear;
+  }
+  .bars i:nth-child(1) { top: 0; }
+  .bars i:nth-child(2) { top: 7px; }
+  .bars i:nth-child(3) { top: 14px; }
+
+  .nav-toggle[aria-expanded="true"] .bars i:nth-child(1) { top: 7px; transform: rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .bars i:nth-child(2) { opacity: 0; transform: scaleX(0.2); }
+  .nav-toggle[aria-expanded="true"] .bars i:nth-child(3) { top: 7px; transform: rotate(-45deg); }
 
   /* ============ BLOCKS ============ */
   /* Every section is at least one screen tall with its content centred.
@@ -597,17 +663,67 @@
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 820px) {
+    /* display:none cannot be transitioned, so the panel stays laid out and is
+       hidden with opacity + visibility instead. visibility is delayed to the
+       end of the fade on close, and instant on open — that keeps the links
+       untabbable while shut without cutting the animation short. */
     .nav ul {
       position: absolute;
       top: 100%;
       left: 0; right: 0;
       flex-direction: column;
-      background: var(--black);
-      padding: 18px 6vw;
-      gap: 16px;
-      display: none;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 14px 6vw 20px;
+      background: rgba(10, 10, 10, 0.62);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.28s var(--ease-out),
+                  transform 0.28s var(--ease-out),
+                  visibility 0s linear 0.28s;
     }
-    .nav ul.open { display: flex; }
+    .nav ul.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none;
+      transition: opacity 0.28s var(--ease-out),
+                  transform 0.28s var(--ease-out),
+                  visibility 0s;
+    }
+
+    /* Items rise in one after another on open. On close they all leave at once,
+       so shutting the menu feels immediate rather than reluctant. */
+    .nav ul li {
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.22s var(--ease-out), transform 0.22s var(--ease-out);
+    }
+    .nav ul.open li { opacity: 1; transform: none; }
+    .nav ul.open li:nth-child(1) { transition-delay: 0.04s; }
+    .nav ul.open li:nth-child(2) { transition-delay: 0.08s; }
+    .nav ul.open li:nth-child(3) { transition-delay: 0.12s; }
+    .nav ul.open li:nth-child(4) { transition-delay: 0.16s; }
+    .nav ul.open li:nth-child(5) { transition-delay: 0.20s; }
+    .nav ul.open li:nth-child(6) { transition-delay: 0.24s; }
+
+    .nav ul li a { display: block; padding: 10px 0; font-size: 0.95rem; }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .nav ul { background: rgba(10, 10, 10, 0.97); }
+    }
+    @media (prefers-reduced-transparency: reduce) {
+      .nav ul {
+        background: rgba(10, 10, 10, 0.97);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+      }
+    }
     .nav-toggle { display: block; }
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
     /* Square on phones: a 3:4 portrait at full column width would take most of
@@ -639,4 +755,9 @@
     html { scroll-behavior: auto; }
     .js .tile, .js .splitw .w { opacity: 1; transform: none; transition: none; }
     #cursor-dot { display: none; }
+    /* The menu still opens and the icon still becomes an X — they just arrive
+       rather than travel. Removing the transition, not the state change. */
+    .bars i,
+    .nav ul,
+    .nav ul li { transition: none; }
   }
