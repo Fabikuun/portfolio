@@ -40,9 +40,9 @@
   <div class="nav-logo">Fabian<span class="dot">.</span></div>
   <ul id="navList">
     <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#education">Education</a></li>
     <li><a href="#beyond">Elsewhere</a></li>
     <li><a href="#setup">Setup</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -107,9 +107,45 @@
     </div>
   </section>
 
+  <section id="education" class="block block-purple">
+    <div class="block-inner">
+      <p class="eyebrow">Ch. 02 — Education</p>
+      <h2 class="big-heading">The formal bit</h2>
+      <ol class="edu-timeline">
+        <li class="edu-row">
+          <span class="edu-year">2024 — now</span>
+          <img class="edu-logo" src="images/logo-iut.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
+          <div class="edu-body">
+            <h3>Islamic University of Technology</h3>
+            <p>B.Sc. in Computer Science &amp; Engineering</p>
+          </div>
+          <span class="edu-tag">In progress</span>
+        </li>
+        <li class="edu-row">
+          <span class="edu-year">2022 — 2023</span>
+          <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
+          <div class="edu-body">
+            <h3>Birshreshtha Noor Mohammad Public College</h3>
+            <p>Higher Secondary Certificate</p>
+          </div>
+          <span class="edu-tag">Completed</span>
+        </li>
+        <li class="edu-row">
+          <span class="edu-year">2010 — 2021</span>
+          <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
+          <div class="edu-body">
+            <h3>Birshreshtha Noor Mohammad Public College</h3>
+            <p>Secondary School Certificate</p>
+          </div>
+          <span class="edu-tag">Completed</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <section id="projects" class="block block-dark">
     <div class="block-inner">
-      <p class="eyebrow">Ch. 02 — Projects</p>
+      <p class="eyebrow">Ch. 03 — Projects</p>
       <h2 class="big-heading">What I've built</h2>
       <div class="project-list">
 
@@ -157,7 +193,8 @@
               <div class="spec-row"><span class="spec-key">Storage</span><span class="spec-val">MySQL · H2 for tests</span></div>
               <div class="spec-row"><span class="spec-key">Layers</span><span class="spec-val">Controller · Service · DAO</span></div>
               <div class="spec-row"><span class="spec-key">Extras</span><span class="spec-val">QR codes · Click analytics</span></div>
-              <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">Working</span></div>
+              <div class="spec-row"><span class="spec-key">Deploy</span><span class="spec-val">Docker on Render</span></div>
+              <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">Live</span></div>
             </div>
           </div>
           <div class="project-body">
@@ -167,8 +204,9 @@
               Paste a long link, get a short code back, and it tracks the clicks — plus a
               QR code endpoint for each link. Codes come from a cryptographically secure
               generator with a collision check against the database before anything is
-              handed out. Every database credential comes from an environment variable
-              with a safe default, so nothing sensitive is ever committed.
+              handed out. Every database credential comes from an environment variable,
+              so nothing sensitive is ever committed — the deploy config asks Render for
+              them instead of carrying them in git.
             </p>
             <div class="reflection">
               <span class="reflection-label">Why not a to-do app</span>
@@ -180,6 +218,7 @@
               </p>
             </div>
             <div class="project-links">
+              <a href="https://url-shortener-9mqs.onrender.com" target="_blank" rel="noopener noreferrer">Live →</a>
               <a href="https://github.com/Fabikuun/url-shortener" target="_blank" rel="noopener noreferrer">Repo →</a>
             </div>
           </div>
@@ -227,7 +266,7 @@
 
   <section id="skills" class="block block-yellow">
     <div class="block-inner">
-      <p class="eyebrow eyebrow-dark">Ch. 03 — Skills</p>
+      <p class="eyebrow eyebrow-dark">Ch. 04 — Skills</p>
       <h2 class="big-heading">What I work with</h2>
       <p class="sec-lead">
         Everything here is something I've built with rather than read about —
@@ -315,41 +354,6 @@
     </div>
   </section>
 
-  <section id="education" class="block block-purple">
-    <div class="block-inner">
-      <p class="eyebrow">Ch. 04 — Education</p>
-      <h2 class="big-heading">The formal bit</h2>
-      <ol class="edu-timeline">
-        <li class="edu-row">
-          <span class="edu-year">2024 — now</span>
-          <img class="edu-logo" src="images/logo-iut.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
-          <div class="edu-body">
-            <h3>Islamic University of Technology</h3>
-            <p>B.Sc. in Computer Science &amp; Engineering</p>
-          </div>
-          <span class="edu-tag">In progress</span>
-        </li>
-        <li class="edu-row">
-          <span class="edu-year">2022 — 2023</span>
-          <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
-          <div class="edu-body">
-            <h3>Birshreshtha Noor Mohammad Public College</h3>
-            <p>Higher Secondary Certificate</p>
-          </div>
-          <span class="edu-tag">Completed</span>
-        </li>
-        <li class="edu-row">
-          <span class="edu-year">2010 — 2021</span>
-          <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
-          <div class="edu-body">
-            <h3>Birshreshtha Noor Mohammad Public College</h3>
-            <p>Secondary School Certificate</p>
-          </div>
-          <span class="edu-tag">Completed</span>
-        </li>
-      </ol>
-    </div>
-  </section>
 
   <section id="beyond" class="block block-green">
     <div class="block-inner">

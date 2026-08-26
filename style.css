@@ -99,13 +99,28 @@
 
   a { color: inherit; text-decoration: none; }
 
-  a:focus-visible, button:focus-visible {
+  /* Focus rings, ordered so no browser is left without one.
+
+     :focus-visible only exists from Safari 15.4 and Firefox 85. Written on its
+     own, the whole rule is invalid on anything older — which means a keyboard
+     user on an iPhone still running iOS 15.3 gets no focus indicator at all.
+     That is a WCAG 2.4.7 failure, not a cosmetic gap.
+
+     So: give every browser a plain :focus ring first, then switch it off for
+     mouse focus only where :focus-visible is actually understood. Old engines
+     keep the ring on click too — showing an extra ring is the right way to
+     fail; showing none is not. */
+  a:focus, button:focus {
     outline: 3px solid var(--white);
     outline-offset: 3px;
   }
-  .block-sky a:focus-visible, .block-yellow a:focus-visible, .block-green a:focus-visible,
-  .block-sky button:focus-visible, .block-yellow button:focus-visible, .block-green button:focus-visible {
+  .block-sky a:focus, .block-yellow a:focus, .block-green a:focus,
+  .block-sky button:focus, .block-yellow button:focus, .block-green button:focus {
     outline-color: var(--black);
+  }
+  @supports selector(:focus-visible) {
+    a:focus:not(:focus-visible),
+    button:focus:not(:focus-visible) { outline: none; }
   }
 
   .skip-link {
