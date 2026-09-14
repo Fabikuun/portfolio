@@ -3,15 +3,14 @@
 
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var finePointer = window.matchMedia('(pointer: fine)').matches;
-    var STEP = 80, MAX_STEPS = 4, WORD_STEP = 30;
+    var STEP = 70, MAX_STEPS = 4;
 
     function safe(name, fn) {
       try { fn(); } catch (err) { console.warn('[portfolio] ' + name + ' skipped:', err); }
     }
     function list(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
-    /* Reveals once, then lets go of both the observer and the safety timer —
-       this is a one-shot animation, nothing here should outlive it. */
+    /* Reveals once, then lets go of both the observer and the safety timer. */
     function revealOnce(nodes, cls) {
       if (!nodes.length) return;
       if (!('IntersectionObserver' in window)) {
@@ -53,7 +52,8 @@
       }, 4500);
     }
 
-    /* The dot tracks the pointer exactly, so no animation loop is needed. */
+    /* The dot tracks the pointer exactly, so no animation loop is needed.
+       It only grows over things that actually do something when clicked. */
     function initCursor() {
       if (!finePointer || reduced) return;
       var dot = document.createElement('div');
@@ -70,7 +70,7 @@
         document.body.classList.remove('cursor-on');
       });
 
-      var GROW = 'a, button, .pill, .spec-panel, .social-btn, .contact-mail, .proof-card, .note-card';
+      var GROW = 'a, button, summary, .zoomable';
       document.addEventListener('mouseover', function (e) {
         var target = e.target instanceof Element ? e.target : null;
         document.body.classList.toggle('cursor-grow', !!(target && target.closest(GROW)));
@@ -102,18 +102,24 @@
       update();
     }
 
+    /* The hero's three parts share a parent, so they come in as one short
+       sequence on load. Everything else reveals as it scrolls into view. */
     var TILE_SELECTOR = [
-      '.portrait', '.project-media', '.project-body', '.proof-card',
-      '.also-chip', '.edu-row', '.social-btn', '.contact-mail', '.note-card',
-      '.eyebrow', '.sec-lead', '.skills-sub'
+      '.mega', '.hero-desc', '.hero-links', '.big-heading', '.sec-lead',
+      '.portrait', '.edu-row', '.project-media', '.project-body',
+      '.proof-card', '.skills-sub', '.also-chip', '.note-card',
+      '.desk-shot', '.setup-details', '.social-btn', '.contact-mail'
     ].join(',');
 
     function initTiles() {
       if (reduced) return;
-      var nodes = list(TILE_SELECTOR);
+      /* Anything inside the closed parts list is left alone: it isn't rendered
+         until opened, so an observer would never see it. */
+      var nodes = list(TILE_SELECTOR).filter(function (el) {
+        return !(el.parentElement && el.parentElement.closest('details'));
+      });
       if (!nodes.length) return;
-      /* Delay is per parent, so each row/grid counts from zero rather than
-         inheriting an ever-growing offset from earlier sections. */
+      /* Delay is per parent, so each group counts from zero. */
       var counts = new Map();
       nodes.forEach(function (el) {
         el.classList.add('tile');
@@ -123,55 +129,6 @@
         el.style.setProperty('--d', (Math.min(i, MAX_STEPS) * STEP) + 'ms');
       });
       revealOnce(nodes, 'in');
-    }
-
-    /* textContent would run the two halves of a <br>-split heading together
-       ("Hey, I'mFabian."), so line breaks are read as spaces instead. */
-    function readableText(el) {
-      var out = '';
-      Array.prototype.slice.call(el.childNodes).forEach(function (node) {
-        if (node.nodeType === 3) out += node.nodeValue;
-        else if (node.nodeName === 'BR') out += ' ';
-        else out += node.textContent;
-      });
-      return out.replace(/\s+/g, ' ').trim();
-    }
-
-    function splitWords(el) {
-      var frag = document.createDocumentFragment();
-      var index = 0;
-      Array.prototype.slice.call(el.childNodes).forEach(function (node) {
-        if (node.nodeType !== 3) { frag.appendChild(node.cloneNode(true)); return; }
-        node.nodeValue.split(/(\s+)/).forEach(function (part) {
-          if (!part) return;
-          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
-          var span = document.createElement('span');
-          span.className = 'w';
-          span.textContent = part;
-          span.style.setProperty('--d', (index * WORD_STEP) + 'ms');
-          index++;
-          frag.appendChild(span);
-        });
-      });
-      el.textContent = '';
-      el.appendChild(frag);
-    }
-
-    function initSplitText() {
-      if (reduced) return;
-      var headings = list('.big-heading, .mega');
-      headings.forEach(function (el) {
-        /* Screen readers get the whole heading as one label; the per-word spans
-           are hidden so it isn't announced one word at a time. */
-        var label = readableText(el);
-        splitWords(el);
-        el.setAttribute('aria-label', label);
-        Array.prototype.slice.call(el.children).forEach(function (child) {
-          child.setAttribute('aria-hidden', 'true');
-        });
-        el.classList.add('splitw');
-      });
-      revealOnce(headings, 'in');
     }
 
     /* The address is split across two data attributes so it isn't sitting in the
@@ -244,8 +201,8 @@
     }
 
     /* Hover covers pointers; touch screens have none, so a tap toggles the
-       same state. Gated to coarse pointers so a mouse user tapping doesn't
-       leave the image stuck in the moved position. */
+       same state. Gated to coarse pointers so a mouse click can't leave the
+       image stuck zoomed. */
     function initZoomTouch() {
       if (finePointer) return;
       list('.zoomable').forEach(function (frame) {
@@ -259,22 +216,30 @@
       var t = document.getElementById('navToggle');
       var l = document.getElementById('navList');
       if (!t || !l) return;
+      function close() {
+        l.classList.remove('open');
+        t.setAttribute('aria-expanded', 'false');
+      }
       t.addEventListener('click', function () {
         var open = l.classList.toggle('open');
         t.setAttribute('aria-expanded', String(open));
       });
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { l.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); }
+        if (e.key === 'Escape') close();
       });
       l.addEventListener('click', function (e) {
-        if (e.target.tagName === 'A') { l.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); }
+        if (e.target.tagName === 'A') close();
+      });
+      // a tap anywhere outside the open menu closes it
+      document.addEventListener('click', function (e) {
+        if (!l.classList.contains('open') || t.contains(e.target) || l.contains(e.target)) return;
+        close();
       });
     }
 
     function boot() {
       safe('cursor', initCursor);
       safe('progress', initProgress);
-      safe('split-text', initSplitText);
       safe('tiles', initTiles);
       safe('nav', initNav);
       safe('mail-reveal', initMailReveal);

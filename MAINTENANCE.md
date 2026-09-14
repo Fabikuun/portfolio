@@ -11,7 +11,7 @@ page — so this doesn't show up there.
 Four things that are easy to break without noticing.
 
 **1. JavaScript only adds motion.**
-Every animated class (`.tile`, `.in`, `.splitw`) is added by `script.js` at runtime.
+Every animated class (`.tile`, `.in`) is added by `script.js` at runtime.
 With scripts off, nothing is hidden — the page just appears without the entrance.
 If I ever write something that starts invisible *in the CSS*, that guarantee is gone.
 
@@ -47,7 +47,6 @@ Copy one whole `<article class="project-row">` block in `index.html` and edit it
     </div>
   </div>
   <div class="project-body">
-    <p class="project-cat">Language · Framework · Kind of thing</p>
     <h3>Project name</h3>
     <p class="project-desc">
       What it does, and what I specifically built. Concrete over impressive.
@@ -57,7 +56,7 @@ Copy one whole `<article class="project-row">` block in `index.html` and edit it
       <p>The thing that didn't work first, or the decision I'd change.</p>
     </div>
     <div class="project-links">
-      <a href="https://github.com/…" target="_blank" rel="noopener noreferrer">Repo →</a>
+      <a href="https://github.com/…" target="_blank" rel="noopener noreferrer">Repository</a>
     </div>
   </div>
 </article>
@@ -90,11 +89,11 @@ drop the rest into a compact one-liner list underneath:
   gap: 20px;
   align-items: baseline;
   padding: 16px 0;
-  border-top: 1px solid var(--hairline-strong);
+  border-top: 1px solid rgba(250, 250, 250, 0.1);
 }
-.project-compact a { font-weight: 800; font-size: var(--fs-body-sm); }
+.project-compact a { font-weight: 700; }
 .project-compact a:hover { color: var(--green); }
-.project-compact span { font-size: var(--fs-label); color: rgba(250, 250, 250, 0.55); }
+.project-compact span { font-size: var(--fs-small); color: rgba(250, 250, 250, 0.6); }
 @media (max-width: 600px) { .project-compact li { grid-template-columns: 1fr; gap: 4px; } }
 ```
 
@@ -119,8 +118,7 @@ Add it as its own section, for example between Skills and Elsewhere:
 ```html
 <section id="achievements" class="block block-dark">
   <div class="block-inner">
-    <p class="eyebrow">Ch. 05 — Achievements</p>
-    <h2 class="big-heading">Worth mentioning</h2>
+    <h2 class="big-heading"><span class="chapter" aria-hidden="true">05</span><span>Worth mentioning</span></h2>
     <div class="note-grid">
       <div class="note-card">
         <span class="note-label">Where and when</span>
@@ -133,7 +131,7 @@ Add it as its own section, for example between Skills and Elsewhere:
 
 Then:
 1. Add `<li><a href="#achievements">Achievements</a></li>` to the nav.
-2. **Renumber the chapter eyebrows below it**. They run Ch. 01–07 in order.
+2. **Renumber the chapter numbers below it**. They run 01–07 in order.
 3. Pick a `block-*` class that doesn't sit next to the same colour twice.
 
 **One honest test before adding anything here:** would a stranger understand why it
@@ -158,6 +156,16 @@ empty because the school name is written right next to the logo.
 
 The PC parts are in `#setup`, inside a `<details>` so they stay hidden until someone
 opens them. Each part is one `.spec-row`. Use the full official product name.
+
+---
+
+## Typeface
+
+`fonts/schibsted-grotesk.woff2` is the Latin subset of the variable font, weights
+400 to 900, from Google Fonts. It's only switched on inside
+`@supports (font-variation-settings: normal)`, so old browsers fall back to the
+system font rather than faking bold. Keep `fonts/OFL.txt` next to it: the licence
+requires it to travel with the font.
 
 ---
 
