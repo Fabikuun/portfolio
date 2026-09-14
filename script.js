@@ -6,7 +6,7 @@
     var STEP = 80, MAX_STEPS = 4, WORD_STEP = 30;
 
     function safe(name, fn) {
-      try { fn(); } catch (err) { console.warn('[preview] ' + name + ' skipped:', err); }
+      try { fn(); } catch (err) { console.warn('[portfolio] ' + name + ' skipped:', err); }
     }
     function list(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
@@ -39,14 +39,9 @@
       }, { threshold: 0.1, rootMargin: '0px 0px -4% 0px' });
       nodes.forEach(function (el) { io.observe(el); });
 
-      /* Safety net against a stuck reveal — but it must not pre-empt the
-         scroll. Revealing every node on a timer meant that on a page taller
-         than a few screens, everything below the fold had already appeared
-         before the reader got there, so scrolling down showed finished
-         content instead of an entrance. So: only conclude the observer is
-         broken if something plainly on screen still hasn't been revealed.
-         If the visible ones came through, the observer works — stand down
-         and leave the rest to the scroll. */
+      /* Safety net: if something on screen still hasn't revealed after 4.5s, the
+         observer isn't working, so reveal everything. Off-screen elements are
+         left for the scroll. */
       timer = setTimeout(function () {
         timer = null;
         var brokenObserver = nodes.some(function (el) {
@@ -75,7 +70,7 @@
         document.body.classList.remove('cursor-on');
       });
 
-      var GROW = 'a, button, .pill, .spec-panel, .social-btn, .contact-mail, .proof-card, .ask-card, .note-card';
+      var GROW = 'a, button, .pill, .spec-panel, .social-btn, .contact-mail, .proof-card, .note-card';
       document.addEventListener('mouseover', function (e) {
         var target = e.target instanceof Element ? e.target : null;
         document.body.classList.toggle('cursor-grow', !!(target && target.closest(GROW)));
@@ -108,8 +103,8 @@
     }
 
     var TILE_SELECTOR = [
-      '.portrait', '.project-media', '.project-body', '.proof-card', '.ask-card',
-      '.also-chip', '.edu-card', '.social-btn', '.contact-mail', '.note-card',
+      '.portrait', '.project-media', '.project-body', '.proof-card',
+      '.also-chip', '.edu-row', '.social-btn', '.contact-mail', '.note-card',
       '.eyebrow', '.sec-lead', '.skills-sub'
     ].join(',');
 
@@ -179,14 +174,8 @@
       revealOnce(headings, 'in');
     }
 
-    /* The address is split across two data attributes and only joined at the
-       moment it is needed. Harvesters read served HTML; they don't fill forms.
-
-       There is no backend here and no third-party form service — the form
-       composes a mailto: and hands it to whatever mail client the visitor
-       already uses. That is why the button says "open" rather than "send":
-       nothing is transmitted from this page, and claiming otherwise would be
-       a lie the moment someone has no mail client configured. */
+    /* The address is split across two data attributes so it isn't sitting in the
+       HTML for scrapers. There's no backend: the form builds a mailto: link. */
     function address(el) {
       return el.dataset.user + '@' + el.dataset.domain;
     }

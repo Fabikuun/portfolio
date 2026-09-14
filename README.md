@@ -1,51 +1,35 @@
 # Portfolio
 
-**[fabikuun.github.io/portfolio](https://fabikuun.github.io/portfolio/)**
+My personal website, live at **https://fabikuun.github.io/portfolio/**
 
-The source for my personal site. Three projects, what I actually did on each,
-and a short section about how I work.
+It covers my projects, education, the tools I work with, a bit about what I do outside of code, and a way to contact me.
 
----
+## Projects on the site
 
-## Built with nothing
+- **FableOps**: a two-player co-op game in Java and libGDX, played over a LAN. I wrote the networking.
+- **URL Shortener**: a Spring Boot app with click tracking and QR codes. [Live](https://url-shortener-9mqs.onrender.com) · [Repo](https://github.com/Fabikuun/url-shortener)
+- **Hotel Management System**: a C++ terminal booking system from an OOP course.
 
-No React, no Tailwind, no bundler, no `node_modules`. Clone it, open `index.html`,
-and it runs — there is no install step and no build step.
+## How it's built
 
-That was a deliberate choice, and it wasn't free. A framework hands you focus states,
-motion preferences and accessible markup for nothing; doing it by hand meant learning
-what those actually are:
+Plain HTML, CSS and JavaScript. There's no framework, no build step and no npm packages, so `index.html` opens straight in a browser.
 
-- **Works without JavaScript.** Every animated class is added at runtime, so with
-  scripts blocked the page renders in full — it just skips the entrance.
-- **Respects `prefers-reduced-motion`** and `prefers-reduced-transparency`.
-- **Colour contrast is measured, not guessed.** Where a value sits close to the
-  WCAG AA threshold, the measured ratio is in a comment beside it.
-- **Responsive by construction.** Type, spacing, radius and layout are driven by
-  `clamp()` and `min()`, so there are no device-width breakpoints to maintain.
-- **One image, three widths, two formats.** The browser downloads exactly one —
-  usually a 40 KB WebP.
+- All the content is written in the HTML, so it's readable with JavaScript turned off. JavaScript adds the animations, the mobile menu and the email form.
+- Animations switch off if your device is set to reduce motion.
+- Font sizes and spacing scale with the screen using `clamp()`, plus a few breakpoints for phones.
+- Photos come in WebP with a JPEG fallback, in several sizes, so phones don't download the big versions.
+- Colour contrast was checked against WCAG AA.
 
-What it buys me: nothing here breaks because a package updated. It will still
-open in five years.
+## Files
 
----
-
-## Stack
-
-`HTML` · `CSS` · `JavaScript` — and that's the whole list.
-
-| | |
+| File | What's in it |
 |---|---|
-| `index.html` | All content, as real HTML — not assembled by JavaScript |
-| `style.css` | All styling. Design tokens are at the top in `:root` |
-| `script.js` | Scroll reveals, cursor dot, progress rail, mobile menu |
-| `images/` | Portrait in WebP and JPEG, three widths each |
-| `404.html` | Served by GitHub Pages for unknown URLs |
-
-Hosted on GitHub Pages, deployed by pushing to `main`.
-
----
+| `index.html` | All the page content |
+| `style.css` | All the styles. Colours, font sizes and spacing are variables at the top |
+| `script.js` | Scroll animations, cursor dot, progress bar, mobile menu, email form |
+| `images/` | My photo, my desk and the school logos |
+| `404.html` | The page shown for broken links |
+| `MAINTENANCE.md` | My notes on how to add or change things |
 
 ## Running it locally
 
@@ -53,15 +37,17 @@ Hosted on GitHub Pages, deployed by pushing to `main`.
 git clone https://github.com/Fabikuun/portfolio.git
 ```
 
-Then open `index.html`. That genuinely is the whole process.
-
-To serve it the way GitHub Pages does:
+Open `index.html` in a browser. To serve it the way GitHub Pages does:
 
 ```bash
 python -m http.server 8000
 ```
 
----
+Then go to `http://localhost:8000`.
+
+## Deploying
+
+GitHub Pages serves the `main` branch. After a push, the site updates in about a minute.
 
 ## Contact
 

@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>document.documentElement.classList.add('js');</script>
 <title>Fabian Mahdi</title>
-<meta name="description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<meta name="description" content="Portfolio of Fabian Mahdi: a LAN co-op game in Java, a Spring Boot URL shortener and a C++ hotel booking system.">
 <link rel="canonical" href="https://fabikuun.github.io/portfolio/">
 <meta name="theme-color" content="#0A0A0A">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fabian Mahdi">
-<meta property="og:description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<meta property="og:description" content="Portfolio of Fabian Mahdi: a LAN co-op game in Java, a Spring Boot URL shortener and a C++ hotel booking system.">
 <meta property="og:url" content="https://fabikuun.github.io/portfolio/">
 <meta property="og:image" content="https://fabikuun.github.io/portfolio/images/profile-1020.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Fabian Mahdi">
-<meta name="twitter:description" content="Fabian builds things that have to stay in agreement — a LAN co-op game with a hand-written network protocol, a Spring Boot URL shortener, and a C++ booking system.">
+<meta name="twitter:description" content="Portfolio of Fabian Mahdi: a LAN co-op game in Java, a Spring Boot URL shortener and a C++ hotel booking system.">
 <meta name="twitter:image" content="https://fabikuun.github.io/portfolio/images/profile-1020.jpg">
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -57,11 +57,9 @@
   <div class="block-inner">
     <h1 class="mega">Hey, I'm<br>Fabian.</h1>
     <p class="hero-desc">
-      I build things that have to stay in agreement — two machines holding the same
-      world across a network, a service handing out short codes without ever
-      repeating one.
+      I write software, mostly in Java and C++. I like projects where separate parts
+      have to stay in sync, like two computers running the same game.
     </p>
-    <p class="hero-tagline">An ongoing story, updated as I build.</p>
     <div class="hero-links">
       <a href="#projects" class="pill pill-solid">See my projects</a>
       <a href="#contact" class="pill pill-outline">Say hi</a>
@@ -77,12 +75,10 @@
       <h2 class="big-heading">The short version</h2>
       <div class="about-grid">
         <p class="lead-text">
-          I like the part of a problem where the pieces have to agree with each other.
-          Most of what I build ends up there eventually — two machines holding the same
-          state, one class quietly doing three jobs, an interface that made perfect sense
-          to the people who built it and to nobody else. I learn more from the version
-          that didn't work than the one that did, and I'd rather write down why something
-          is the way it is than pretend it was obvious all along.
+          I usually end up working on the part that holds a project together. In a game
+          that was the networking, and in a booking system it was the billing and
+          payment code. I also keep a running log of why I made each decision while I
+          build, mostly so I don't forget.
         </p>
         <figure class="portrait zoomable">
           <picture>
@@ -113,7 +109,7 @@
       <h2 class="big-heading">The formal bit</h2>
       <ol class="edu-timeline">
         <li class="edu-row">
-          <span class="edu-year">2024 — now</span>
+          <span class="edu-year">2024–now</span>
           <img class="edu-logo" src="images/logo-iut.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
           <div class="edu-body">
             <h3>Islamic University of Technology</h3>
@@ -122,7 +118,7 @@
           <span class="edu-tag">In progress</span>
         </li>
         <li class="edu-row">
-          <span class="edu-year">2022 — 2023</span>
+          <span class="edu-year">2022–2023</span>
           <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
           <div class="edu-body">
             <h3>Birshreshtha Noor Mohammad Public College</h3>
@@ -131,7 +127,7 @@
           <span class="edu-tag">Completed</span>
         </li>
         <li class="edu-row">
-          <span class="edu-year">2010 — 2021</span>
+          <span class="edu-year">2010–2021</span>
           <img class="edu-logo" src="images/logo-bnmpc.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
           <div class="edu-body">
             <h3>Birshreshtha Noor Mohammad Public College</h3>
@@ -162,22 +158,20 @@
             <p class="project-cat">Java · libGDX · LAN multiplayer</p>
             <h3>FableOps</h3>
             <p class="project-desc">
-              A two-player co-op survival game where both players are on separate machines
-              over a LAN. I wrote the networking from scratch — a host/client session model
-              with its own typed message protocol, because the two screens have to agree on
-              enemy positions, health and puzzle state without ever drifting apart. Level 1
-              is a reactor room: one player enters code fragments while an alert meter
-              climbs and an enemy swarm closes in.
+              A two-player co-op survival game, played on two computers over a LAN. I
+              wrote the networking myself: a host/client setup that sends typed messages
+              back and forth, so both screens show the same enemies, health and puzzle
+              state. In level 1, one player types in code fragments to unlock a reactor
+              while an alert meter fills up and enemies close in.
             </p>
             <div class="reflection">
               <span class="reflection-label">The hard part</span>
               <p>
-                Deciding what to send over the wire. Sending whole world state every frame
-                is simple and doesn't scale; sending nothing but inputs means the two
-                machines quietly disagree. I ended up with eleven separate message types
-                for level 1 alone — enemy state, alert meter, digit accepted, wrong answer,
-                reactor unlock, player died — each one existing because something desynced
-                without it.
+                Working out what to send over the network. Sending the whole game state
+                every frame was too much, and sending only player inputs let the two
+                games slowly drift apart. Level 1 ended up with eleven message types,
+                including enemy state, alert meter, wrong answer and player died. Most
+                of them exist because something went out of sync without them.
               </p>
             </div>
             <div class="project-links">
@@ -201,20 +195,19 @@
             <p class="project-cat">Java · Spring Boot · REST</p>
             <h3>URL Shortener</h3>
             <p class="project-desc">
-              Paste a long link, get a short code back, and it tracks the clicks — plus a
-              QR code endpoint for each link. Codes come from a cryptographically secure
-              generator with a collision check against the database before anything is
-              handed out. Every database credential comes from an environment variable,
-              so nothing sensitive is ever committed — the deploy config asks Render for
-              them instead of carrying them in git.
+              Paste a long link and get a short one back, along with a QR code. Each
+              click is counted before the redirect happens. Codes are random six-
+              character strings, checked against the database so the same code never
+              gets handed out twice. Database credentials come from environment
+              variables, so they aren't stored in the repo.
             </p>
             <div class="reflection">
               <span class="reflection-label">Why not a to-do app</span>
               <p>
-                I wanted something small enough to actually finish that still had real
-                parts to it — routing, database design, and analytics. I kept a running
-                log of decisions in the repo while building rather than writing it up
-                afterwards, so the reasoning is still there when I go back to it.
+                I wanted a project small enough to finish that still had real parts to
+                it: routing, a database and click analytics. It was also the first time
+                I built a backend and a frontend together, and the first thing I
+                deployed.
               </p>
             </div>
             <div class="project-links">
@@ -238,20 +231,20 @@
             <p class="project-cat">C++ · OOP · Sem 03</p>
             <h3>Hotel Management System</h3>
             <p class="project-desc">
-              A terminal booking system for my OOP course — search a room by location, date
-              and price, then book it. I took billing apart: pulled payment processing out
-              of the billing class into its own type, moved shared behaviour up into a base
-              class, templated the menu handling, and replaced silent failures with real
-              error handling. I also overloaded the date operators, so working out a stay
-              length reads like ordinary subtraction.
+              A terminal booking system built for an OOP course. You search rooms by
+              location, date and price, then book one. Most of my work was in billing: I
+              moved payment processing into its own class, pulled shared code into a
+              base class, used templates for the menu handling and added proper error
+              handling. I also overloaded the date operators, so a stay length is just
+              one date minus another.
             </p>
             <div class="reflection">
               <span class="reflection-label">If I rebuilt it today</span>
               <p>
-                A real database instead of a hardcoded one, an API to actually simulate
-                booking, and fixing the flow — we asked for location and room before
-                dates, backwards from how every real booking site works. I didn't notice
-                until it was already built.
+                I'd use a real database instead of hardcoded data, add an API to
+                simulate actual bookings, and fix the booking flow. We asked for the
+                location and room before the dates, which is the opposite of how booking
+                sites work, and I only noticed once it was built.
               </p>
             </div>
             <div class="project-links">
@@ -269,8 +262,7 @@
       <p class="eyebrow eyebrow-dark">Ch. 04 — Skills</p>
       <h2 class="big-heading">What I work with</h2>
       <p class="sec-lead">
-        Everything here is something I've built with rather than read about —
-        the line under each name says which project.
+        Each card lists the projects I used it in.
       </p>
 
       <h3 class="skills-sub">Used it on something real</h3>
@@ -279,9 +271,8 @@
           <span class="proof-tier">Main language</span>
           <h4>Java</h4>
           <p>
-            Two projects, two very different shapes — a Spring Boot REST service with a
-            layered controller/service/DAO split, and a networked game where I wrote the
-            socket layer and its message protocol by hand.
+            A Spring Boot REST API split into controller, service and DAO layers, and
+            the socket networking for a LAN game.
           </p>
           <span class="proof-where">FableOps · URL Shortener</span>
         </article>
@@ -289,9 +280,8 @@
           <span class="proof-tier">Language</span>
           <h4>C++</h4>
           <p>
-            Refactored a billing class that did too much — split payment into its own type,
-            lifted shared behaviour into a base class, templated the menu handling, and
-            overloaded the date operators so stay length reads like subtraction.
+            Classes, inheritance, templates and operator overloading, used while
+            restructuring the billing code of a booking system.
           </p>
           <span class="proof-where">Hotel Management System</span>
         </article>
@@ -299,9 +289,8 @@
           <span class="proof-tier">The web bit</span>
           <h4>HTML · CSS · JS</h4>
           <p>
-            This site, and the front end for the shortener. Hand-written, no framework,
-            no build step — which meant owning the parts a framework usually hides: focus
-            states, reduced-motion handling, and still working with JavaScript switched off.
+            This site and the shortener's front end, both written by hand without a
+            framework.
           </p>
           <span class="proof-where">This portfolio · URL Shortener</span>
         </article>
@@ -309,8 +298,8 @@
           <span class="proof-tier">Workflow</span>
           <h4>Git &amp; GitHub</h4>
           <p>
-            Branches, pull requests and merges across two team projects, and it's what
-            ships this site — every change a commit that goes straight to GitHub Pages.
+            Branches, pull requests and merges on two team projects. This site deploys
+            to GitHub Pages straight from a push.
           </p>
           <span class="proof-where">Both team projects · This site</span>
         </article>
@@ -327,30 +316,6 @@
         <span class="also-chip">raylib</span>
         <span class="also-chip">VS Code</span>
       </div>
-
-      <h3 class="skills-sub">Ask me about</h3>
-      <div class="ask-grid">
-        <div class="ask-card">
-          <span class="ask-q">The one I got wrong</span>
-          Why our booking flow asked for location and room before dates — backwards from
-          every real booking site, and I didn't notice until it was built.
-        </div>
-        <div class="ask-card">
-          <span class="ask-q">The one that took longest</span>
-          Why two machines in the same game kept quietly disagreeing, and how eleven
-          message types turned out to be the answer rather than one big one.
-        </div>
-        <div class="ask-card">
-          <span class="ask-q">The small detail I like</span>
-          Short codes come from a secure generator, then get checked against the
-          database before anyone sees them — collisions are rare, not impossible.
-        </div>
-        <div class="ask-card">
-          <span class="ask-q">The stubborn choice</span>
-          Building this site with zero dependencies — slower to write, but nothing here
-          breaks because a package updated.
-        </div>
-      </div>
     </div>
   </section>
 
@@ -363,17 +328,16 @@
         <div class="note-card">
           <span class="note-label">What I watch</span>
           <p>
-            Anime and manga, mostly the slow character-driven kind. I drop plenty of
-            what I start — I'd rather stop early than finish something out of obligation.
+            Anime and manga, mostly slower, character-driven stories. I drop a lot of
+            what I start if it stops holding my attention.
           </p>
         </div>
         <div class="note-card">
           <span class="note-label">What I listen to</span>
           <p>
-            Something is always playing while I work, and it's mostly Japanese — YOASOBI,
-            Ado, Kenshi Yonezu — with Arctic Monkeys and The Weeknd wandering in from
-            somewhere else entirely. Anime and J-pop topped my year, which lines up
-            suspiciously well with the card above.
+            Usually something while I work. Mostly Japanese artists like YOASOBI, Ado
+            and Kenshi Yonezu, plus Arctic Monkeys and The Weeknd. Anime music and J-pop
+            were my top two genres over the past year.
           </p>
         </div>
       </div>
@@ -389,7 +353,7 @@
       <p class="eyebrow">Ch. 06 — Setup</p>
       <h2 class="big-heading">What I build on</h2>
       <p class="sec-lead">
-        Where everything above actually gets made.
+        Where everything above gets made.
       </p>
 
 
@@ -455,7 +419,9 @@
       <div class="contact-grid">
 
         <div class="contact-social">
-          <p class="contact-lead">Both of these are me. One has the code, the other has the tidy version.</p>
+          <p class="contact-lead">
+            My code is on GitHub. Everything else is on LinkedIn.
+          </p>
           <div class="social-row">
             <a class="social-btn" href="https://github.com/Fabikuun" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
@@ -472,20 +438,20 @@
 
         <form class="contact-mail" id="mailForm" novalidate
               data-user="fabianmahdi" data-domain="iut-dhaka.edu">
-          <span class="note-label">Or just write</span>
+          <span class="note-label">Send me an email</span>
 
           <div class="form-field">
             <label for="mf-subject">Subject</label>
             <input type="text" id="mf-subject" name="subject" autocomplete="off"
-                   placeholder="What it's about" aria-describedby="mf-subject-err">
-            <p class="form-error" id="mf-subject-err" hidden>Give it a subject so I know what I'm opening.</p>
+                   placeholder="What's it about?" aria-describedby="mf-subject-err">
+            <p class="form-error" id="mf-subject-err" hidden>Please add a subject.</p>
           </div>
 
           <div class="form-field">
             <label for="mf-message">Message</label>
             <textarea id="mf-message" name="message" rows="4"
-                      placeholder="Whatever you'd like to say" aria-describedby="mf-message-err"></textarea>
-            <p class="form-error" id="mf-message-err" hidden>A message would help.</p>
+                      placeholder="Write your message" aria-describedby="mf-message-err"></textarea>
+            <p class="form-error" id="mf-message-err" hidden>Please write a message.</p>
           </div>
 
           <button type="submit" class="mail-btn">
@@ -499,7 +465,7 @@
           <p class="form-status" id="mf-status" role="status" aria-live="polite"></p>
 
           <button type="button" class="mail-plain" id="mailReveal">
-            <span id="mailRevealText">or just show me the address</span>
+            <span id="mailRevealText">Show my email address</span>
           </button>
         </form>
 
@@ -510,8 +476,8 @@
 </main>
 
 <footer class="site-footer">
-  <span>© 2026 Fabian Mahdi — hand-built, as the absence of a framework suggests.</span>
-  <span>HTML · CSS · JS</span>
+  <span>© 2026 Fabian Mahdi. Designed and built by me.</span>
+  <a href="https://github.com/Fabikuun/portfolio" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
 </footer>
 
 <script src="script.js" defer></script>

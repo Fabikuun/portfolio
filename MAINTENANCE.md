@@ -105,7 +105,6 @@ for the split.
 
 Delete its `<article>`. Then check:
 - The **Skills** section — `.proof-where` lines name projects ("FableOps · URL Shortener").
-- The **Ask me about** cards — some reference specific projects.
 - The meta description in `<head>`, which names all three.
 
 ---
@@ -113,10 +112,9 @@ Delete its `<article>`. Then check:
 ## Add an achievement
 
 There's no achievements section yet. If one is worth adding, **don't invent a new
-component** — reuse the education card, which is already the right shape for
-"a thing with a title, a line of detail, and a status".
+component**. Reuse the note card that the Elsewhere section already uses.
 
-Add a section between Education and Beyond Code:
+Add it as its own section, for example between Skills and Elsewhere:
 
 ```html
 <section id="achievements" class="block block-dark">
@@ -135,7 +133,7 @@ Add a section between Education and Beyond Code:
 
 Then:
 1. Add `<li><a href="#achievements">Achievements</a></li>` to the nav.
-2. **Renumber the chapter eyebrows below it** — they run Ch. 01–06 in order.
+2. **Renumber the chapter eyebrows below it**. They run Ch. 01–07 in order.
 3. Pick a `block-*` class that doesn't sit next to the same colour twice.
 
 **One honest test before adding anything here:** would a stranger understand why it
@@ -147,12 +145,19 @@ section is worse than none — it invites the question "is that all?".
 
 ## Edit education
 
-One card in `#education`. To add a second, duplicate `.edu-card` — the section has
-room. Keep the tag text short (`In progress`, a year, `Completed`).
+Each entry is an `<li class="edu-row">` inside `.edu-timeline`. Copy one and change
+the years, school name, qualification and tag. Newest goes first. Keep the tag short
+(`In progress`, `Completed`).
 
-Don't add school or college. Once university is listed, pre-university education
-stops carrying information for a technical reader and just pushes the projects
-further down.
+Logos go in `images/` as a square 192px `.webp`, with a `.png` copy. The `alt` stays
+empty because the school name is written right next to the logo.
+
+---
+
+## Update the parts list
+
+The PC parts are in `#setup`, inside a `<details>` so they stay hidden until someone
+opens them. Each part is one `.spec-row`. Use the full official product name.
 
 ---
 
